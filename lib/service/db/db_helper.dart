@@ -35,21 +35,21 @@ class DatabaseHelper {
         //       )
         //       """);
 
-        db.execute("""CREATE TABLE objectives(
-              id INTEGER PRIMARY KEY,""" +
-            // account_id INTEGER NOT NULL,
-            """
-              title TEXT,
-              create_at INTEGER,
-              update_at INTEGER
-              )
-              """);
+        // db.execute("""CREATE TABLE objectives(
+        //       id INTEGER PRIMARY KEY,""" +
+        //     // account_id INTEGER NOT NULL,
+        //     """
+        //       title TEXT,
+        //       create_at INTEGER,
+        //       update_at INTEGER
+        //       )
+        //       """);
 
         db.execute("""CREATE TABLE translations(
               id INTEGER PRIMARY KEY,""" +
             // account_id INTEGER NOT NULL,
+            // objective_id INTEGER,
             """
-              objective_id INTEGER,
               amoung INTEGER,
               type INTEGER,
               active INTEGER,
@@ -64,7 +64,7 @@ class DatabaseHelper {
   }
 
   // AccountDao _account = AccountDao();
-  ObjectiveDao _objective = ObjectiveDao();
+  // ObjectiveDao _objective = ObjectiveDao();
   TranslationDao _translation = TranslationDao();
 
   // AccountDao get account {
@@ -73,11 +73,11 @@ class DatabaseHelper {
   //   return _account;
   // }
 
-  ObjectiveDao get objective {
-    _objective.checkDB(_database);
+  // ObjectiveDao get objective {
+  //   _objective.checkDB(_database);
 
-    return _objective;
-  }
+  //   return _objective;
+  // }
 
   TranslationDao get translation {
     _translation.checkDB(_database);

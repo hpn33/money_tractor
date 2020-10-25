@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:money_tractor/service/db/db_helper.dart';
-import 'package:money_tractor/service/db/model/Objective.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
+import 'package:money_tractor/src/panel/translationMenu/amoungInput.dart';
 
-import 'component/addODialog.dart';
-import 'component/addTDialog.dart';
+import 'translationMenu/addTDialog.dart';
 
 final listProvider = StateProvider<List<Translation>>((ref) => []);
 
@@ -21,22 +20,27 @@ class Panel extends ConsumerWidget {
   AppBar appBar(BuildContext context) {
     return AppBar(
       actions: [
+        // FlatButton(
+        //   child: Text(
+        //     'add Objective',
+        //     style: TextStyle(color: Colors.white),
+        //   ),
+        //   onPressed: () {
+        //     showDialog(
+        //       context: context,
+        //       builder: (context) => AddObjective(),
+        //     );
+        //   },
+        // ),
         FlatButton(
-          child: Text(
-            'add Objective',
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => AddObjective(),
-            );
-          },
-        ),
-        FlatButton(
-          child: Text(
-            'add Translation',
-            style: TextStyle(color: Colors.white),
+          child: Row(
+            children: [
+              Icon(Icons.add, color: Colors.white),
+              Text(
+                'Add Translation',
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
           ),
           onPressed: () {
             showDialog(
@@ -55,6 +59,12 @@ class Panel extends ConsumerWidget {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return Center(child: CircularProgressIndicator());
+
+        context
+            .read(dbProvider)
+            .translation
+            .all()
+            .then((value) => context.read(listProvider).state = value);
 
         return Consumer(
           builder: (
@@ -78,53 +88,40 @@ class TCard extends ConsumerWidget {
   final Translation item;
   TCard(this.item);
 
-  final getObjectiveByIdProvider = FutureProvider.family<Objective, int>(
-      (ref, id) => ref.read(dbProvider).objective.getById(id));
+  // final getObjectiveByIdProvider = FutureProvider.family<Objective, int>(
+  //     (ref, id) => ref.read(dbProvider).objective.getById(id));
 
   @override
   Widget build(BuildContext context, watch) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: item.type == 0 ? Colors.red[100] : Colors.green[100],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(item.amoung.toString()),
-                ],
-              ),
+    final isIncome = item.type == 1;
+    final cColor = isIncome ? Colors.green : Colors.red;
+    final sign = isIncome ? '+' : '-';
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      textDirection: isIncome ? TextDirection.rtl : TextDirection.ltr,
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: cColor[50],
+            border: Border(bottom: BorderSide(color: cColor)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "$sign ${item.amoung}",
+              style: TextStyle(fontSize: 16),
             ),
           ),
-          if (item.objectiveId > 0)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Container(
-                alignment: Alignment.center,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                  color: Colors.grey,
-                ),
-                child: watch(getObjectiveByIdProvider(item.objectiveId)).when(
-                  data: (item) => Text(item.title),
-                  loading: () => Text('wait...'),
-                  error: (e, s) => Text(e),
-                ),
-              ),
-            ),
-        ],
-      ),
+        ),
+        Text(
+          '01/10/2020',
+          style: TextStyle(
+            color: Colors.grey[300],
+          ),
+        ),
+      ],
     );
   }
 }

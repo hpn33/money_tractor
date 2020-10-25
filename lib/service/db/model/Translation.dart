@@ -1,7 +1,7 @@
 class Translation {
   int id;
   // int accountId = 0;
-  int objectiveId = 0;
+  // int objectiveId = 0;
 
   int amoung = 0;
   int type = 0;
@@ -13,7 +13,7 @@ class Translation {
   Translation({
     this.id,
     // this.accountId = 0,
-    this.objectiveId = 0,
+    // this.objectiveId = 0,
     this.amoung = 0,
     this.type = 0,
     this.active = 0,
@@ -27,7 +27,7 @@ class Translation {
   Translation.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     // accountId = map['account_id'];
-    objectiveId = map['objective_id'];
+    // objectiveId = map['objective_id'];
 
     amoung = map['amoung'];
     type = map['type'];
@@ -41,7 +41,7 @@ class Translation {
     return {
       'id': id,
       // 'account_id': accountId,
-      'objective_id': objectiveId,
+      // 'objective_id': objectiveId,
       'amoung': amoung,
       'type': type,
       'active': active,
@@ -55,8 +55,8 @@ class Translation {
     return '''Translation{
       id: $id,'''
         // account_id: $accountId,
+        // objective_id: $objectiveId,
         ''' 
-      objective_id: $objectiveId, 
       amoung: $amoung, 
       type: $type, 
       active: $active, 
