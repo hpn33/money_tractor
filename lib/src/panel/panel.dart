@@ -5,6 +5,7 @@ import 'package:money_tractor/service/db/db_helper.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
 
 import 'translation/TranslationDialog.dart';
+import 'util.dart';
 
 final listProvider = FutureProvider<List<Translation>>((ref) {
   final db = ref.read(dbProvider);
@@ -50,11 +51,7 @@ class Panel extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) => TranslationDialog(),
-            ).then((value) {
-              context.read(typeProvider).state = true;
-              context.read(amoungProvider).state = '0';
-              context.read(idProvider).state = -1;
-            });
+            ).then((value) => resetData(context));
           },
         ),
       ],
@@ -124,7 +121,7 @@ class Panel extends StatelessWidget {
     for (var item in list) {
       final sign = item.type == 1 ? 1 : -1;
 
-      sum += sign * item.amoung;
+      if (item.active == 1) sum += sign * item.amoung;
     }
     return sum;
   }
@@ -148,28 +145,35 @@ class TCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, watch) {
+    final isActive = item.active == 1;
     final isIncome = item.type == 1;
-    final cColor = isIncome ? Colors.green : Colors.red;
+    final cColor = isActive
+        ? isIncome
+            ? Colors.green
+            : Colors.red
+        : Colors.grey;
+
     final sign = isIncome ? '+' : '-';
     final amoung = intl.NumberFormat("###,###", "en_US").format(item.amoung);
 
     return GestureDetector(
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         textDirection: isIncome ? TextDirection.rtl : TextDirection.ltr,
         children: [
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: cColor[50],
+              color: isActive ? cColor[50] : Colors.grey[200],
               border: Border(bottom: BorderSide(color: cColor)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[300],
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                ),
-              ],
+              boxShadow: isActive
+                  ? [
+                      BoxShadow(
+                        color: Colors.grey[300],
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                      ),
+                    ]
+                  : null,
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -191,15 +195,12 @@ class TCard extends ConsumerWidget {
         context.read(typeProvider).state = item.type == 1;
         context.read(amoungProvider).state = item.amoung.toString();
         context.read(idProvider).state = item.id;
+        context.read(activeProvider).state = item.active == 1;
 
         showDialog(
           context: context,
           builder: (c) => TranslationDialog(),
-        ).then((value) {
-          context.read(typeProvider).state = true;
-          context.read(amoungProvider).state = '0';
-          context.read(idProvider).state = -1;
-        });
+        ).then((value) => resetData(context));
       },
     );
   }

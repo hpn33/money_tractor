@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final idProvider = StateProvider((ref) => -1);
 final typeProvider = StateProvider((ref) => true);
 final amoungProvider = StateProvider((ref) => '0');
+final activeProvider = StateProvider((ref) => true);
 
 class TranslationDialog extends StatelessWidget {
   @override
@@ -28,8 +29,10 @@ class TranslationDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SwitchTypePayment(typeProvider),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 AmoungInput(amoungProvider),
+                SizedBox(height: 20),
+                activeButton(),
               ],
             ),
           ),
@@ -44,6 +47,34 @@ class TranslationDialog extends StatelessWidget {
     );
   }
 
+  Widget activeButton() {
+    return Consumer(
+      builder: (
+        BuildContext context,
+        T Function<T>(ProviderBase<Object, T>) watch,
+        Widget child,
+      ) {
+        final active = watch(activeProvider).state;
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(active ? 'active' : 'deactive'),
+              Switch(
+                value: active,
+                onChanged: (bool value) {
+                  context.read(activeProvider).state = value;
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void insert(BuildContext context) async {
     final db = context.read(dbProvider);
     final amoungText = context.read(amoungProvider).state;
@@ -52,6 +83,7 @@ class TranslationDialog extends StatelessWidget {
       Translation(
         amoung: amoungText == '' ? 0 : int.parse(amoungText),
         type: context.read(typeProvider).state ? 1 : 0,
+        active: context.read(activeProvider).state ? 1 : 0,
       ),
     );
 
@@ -69,6 +101,7 @@ class TranslationDialog extends StatelessWidget {
         id: context.read(idProvider).state,
         amoung: amoungText == '' ? 0 : int.parse(amoungText),
         type: context.read(typeProvider).state ? 1 : 0,
+        active: context.read(activeProvider).state ? 1 : 0,
       ),
     );
 

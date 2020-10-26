@@ -1,3 +1,4 @@
+* PanelPage: add activation to translation
 * PanelPage: clean unused code
 * PanelPage: fix: on translation insert menu was not reset after closing
 * PanelPage: Ability to Edit Translation
