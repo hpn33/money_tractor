@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money_tractor/src/panel/panel.dart';
 import 'package:money_tractor/src/splash/Splash.dart';
 
 class MyApp extends StatelessWidget {

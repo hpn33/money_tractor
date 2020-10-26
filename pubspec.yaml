@@ -36,6 +36,7 @@ dependencies:
   hooks_riverpod:
 
   flutter_masked_text: ^0.8.0
+  intl:
 
 dev_dependencies:
   flutter_test:

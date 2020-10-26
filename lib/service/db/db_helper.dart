@@ -4,7 +4,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'dao/TranslationDao.dart';
-import 'dao/objectiveDao.dart';
 
 final dbProvider = Provider.autoDispose((ref) => DatabaseHelper());
 
@@ -13,13 +12,8 @@ class DatabaseHelper {
   final _databaseVersion = 1;
 
   Database _database;
-  // DatabaseHelper() {
-  //   _initDatabase();
-  // }
 
-  Future<DatabaseHelper> init() async {
-    if (_database != null) return this;
-
+  Future<bool> open() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, _databaseName);
 
@@ -60,7 +54,7 @@ class DatabaseHelper {
       },
     );
 
-    return this;
+    return _database.isOpen;
   }
 
   // AccountDao _account = AccountDao();
@@ -79,9 +73,5 @@ class DatabaseHelper {
   //   return _objective;
   // }
 
-  TranslationDao get translation {
-    _translation.checkDB(_database);
-
-    return _translation;
-  }
+  TranslationDao get translation => _translation..checkDB(_database);
 }

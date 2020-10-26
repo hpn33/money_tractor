@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:hooks_riverpod/all.dart';
 import 'amoungInput.dart';
 import 'submitButton.dart';
 import 'switchTypePayment.dart';

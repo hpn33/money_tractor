@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/all.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:money_tractor/service/db/db_helper.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
-import 'package:money_tractor/src/panel/translationMenu/amoungInput.dart';
 
 import 'translationMenu/addTDialog.dart';
 
@@ -55,7 +55,7 @@ class Panel extends ConsumerWidget {
 
   Widget body(watch) {
     return StreamBuilder(
-      stream: watch(dbProvider).init().asStream(),
+      stream: watch(dbProvider).open().asStream(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return Center(child: CircularProgressIndicator());
@@ -72,15 +72,69 @@ class Panel extends ConsumerWidget {
             T Function<T>(ProviderBase<Object, T>) watch,
             Widget child,
           ) {
-            return ListView(
+            final list = watch(listProvider).state;
+            final sum = sumAmoungs(list);
+            final sumText = sumFormater(sum);
+            final sumColor = sum >= 0 ? Colors.green : Colors.red;
+
+            return Column(
               children: [
-                for (var item in watch(listProvider).state) TCard(item),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      SizedBox(height: 20),
+                      for (var item in list) TCard(item),
+                      SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: sumColor[100],
+                    border: Border(
+                      top: BorderSide(
+                        width: 1,
+                        color: sumColor,
+                      ),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey[400],
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                      ),
+                    ],
+                  ),
+                  height: 52,
+                  alignment: Alignment.center,
+                  child: Text(sumText),
+                ),
               ],
             );
           },
         );
       },
     );
+  }
+
+  int sumAmoungs(List<Translation> list) {
+    var sum = 0;
+
+    for (var item in list) {
+      final sign = item.type == 1 ? 1 : -1;
+
+      sum += sign * item.amoung;
+    }
+    return sum;
+  }
+
+  String sumFormater(int sum) {
+    if (sum == 0) return '- 0 -';
+
+    final sumFormated = intl.NumberFormat("###,###", "en_US").format(sum);
+    final sign = sum.sign == -1 ? '-' : '+';
+
+    return '$sign $sumFormated';
   }
 }
 
@@ -96,9 +150,10 @@ class TCard extends ConsumerWidget {
     final isIncome = item.type == 1;
     final cColor = isIncome ? Colors.green : Colors.red;
     final sign = isIncome ? '+' : '-';
+    final amoung = intl.NumberFormat("###,###", "en_US").format(item.amoung);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       textDirection: isIncome ? TextDirection.rtl : TextDirection.ltr,
       children: [
         Container(
@@ -106,21 +161,28 @@ class TCard extends ConsumerWidget {
           decoration: BoxDecoration(
             color: cColor[50],
             border: Border(bottom: BorderSide(color: cColor)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey[300],
+                spreadRadius: 1,
+                blurRadius: 5,
+              ),
+            ],
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "$sign ${item.amoung}",
+              "$sign $amoung",
               style: TextStyle(fontSize: 16),
             ),
           ),
         ),
-        Text(
-          '01/10/2020',
-          style: TextStyle(
-            color: Colors.grey[300],
-          ),
-        ),
+        // Text(
+        //   '01/10/2020',
+        //   style: TextStyle(
+        //     color: Colors.grey[300],
+        //   ),
+        // ),
       ],
     );
   }
