@@ -194,7 +194,7 @@ class TCard extends ConsumerWidget {
 
         showDialog(
           context: context,
-          builder: (c) => TranslationDialog(item),
+          builder: (c) => TranslationDialog(),
         ).then((value) {
           context.read(typeProvider).state = true;
           context.read(amoungProvider).state = '0';

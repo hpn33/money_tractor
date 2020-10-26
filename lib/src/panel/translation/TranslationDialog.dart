@@ -12,10 +12,6 @@ final typeProvider = StateProvider((ref) => true);
 final amoungProvider = StateProvider((ref) => '0');
 
 class TranslationDialog extends StatelessWidget {
-  final Translation item;
-
-  TranslationDialog([this.item]);
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -41,7 +37,7 @@ class TranslationDialog extends StatelessWidget {
           SubmitButton(
             amoungProvider,
             typeProvider,
-            item == null ? insert : update,
+            context.read(idProvider).state == -1 ? insert : update,
           ),
         ],
       ),
