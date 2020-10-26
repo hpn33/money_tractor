@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'dao/TranslationDao.dart';
 
-final dbProvider = Provider.autoDispose((ref) => DatabaseHelper());
+final dbProvider = Provider((ref) => DatabaseHelper());
 
 class DatabaseHelper {
   final _databaseName = "moneyTractor.db";

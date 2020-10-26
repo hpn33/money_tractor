@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/all.dart';
 
-final typeProvider = StateProvider((ref) => true);
-
 class SwitchTypePayment extends ConsumerWidget {
+  final StateProvider<bool> typeProvider;
+  SwitchTypePayment(this.typeProvider);
+
   @override
   Widget build(BuildContext context, watch) {
     final selected = watch(typeProvider).state;

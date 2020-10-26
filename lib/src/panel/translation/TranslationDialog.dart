@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
-import 'amoungInput.dart';
-import 'submitButton.dart';
-import 'switchTypePayment.dart';
+import 'package:money_tractor/service/db/db_helper.dart';
+import 'package:money_tractor/service/db/model/Translation.dart';
+import '../panel.dart';
+import 'component/amoungInput.dart';
+import 'component/submitButton.dart';
+import 'component/switchTypePayment.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddTranslation extends StatelessWidget {
+final idProvider = StateProvider((ref) => -1);
+final typeProvider = StateProvider((ref) => true);
+final amoungProvider = StateProvider((ref) => '0');
+
+class TranslationDialog extends StatelessWidget {
+  final Translation item;
+
+  TranslationDialog([this.item]);
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -19,18 +31,54 @@ class AddTranslation extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SwitchTypePayment(),
+                SwitchTypePayment(typeProvider),
                 SizedBox(height: 30),
-                AmoungInput(),
-                SizedBox(height: 10),
+                AmoungInput(amoungProvider),
               ],
             ),
           ),
           SizedBox(height: 50),
-          SubmitButton(),
+          SubmitButton(
+            amoungProvider,
+            typeProvider,
+            item == null ? insert : update,
+          ),
         ],
       ),
     );
+  }
+
+  void insert(BuildContext context) async {
+    final db = context.read(dbProvider);
+    final amoungText = context.read(amoungProvider).state;
+
+    final result = await db.translation.insert(
+      Translation(
+        amoung: amoungText == '' ? 0 : int.parse(amoungText),
+        type: context.read(typeProvider).state ? 1 : 0,
+      ),
+    );
+
+    if (result != 0) context.refresh(listProvider);
+
+    Navigator.pop(context);
+  }
+
+  void update(BuildContext context) async {
+    final db = context.read(dbProvider);
+    final amoungText = context.read(amoungProvider).state;
+
+    final result = await db.translation.update(
+      Translation(
+        id: context.read(idProvider).state,
+        amoung: amoungText == '' ? 0 : int.parse(amoungText),
+        type: context.read(typeProvider).state ? 1 : 0,
+      ),
+    );
+
+    if (result != 0) context.refresh(listProvider);
+
+    Navigator.pop(context);
   }
 }
 

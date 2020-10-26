@@ -52,7 +52,7 @@ class _SplashState extends State<Splash> {
                 loader: dbLoader,
                 onComplete: (value) {
                   timer = Timer.periodic(
-                    Duration(seconds: 3),
+                    Duration(seconds: 1),
                     (timer) {
                       Navigator.pushReplacement(
                         context,
@@ -71,11 +71,7 @@ class _SplashState extends State<Splash> {
   }
 }
 
-final dbLoader = FutureProvider((ref) async {
-  await Future.delayed(Duration(seconds: 2));
-
-  return ref.read(dbProvider).open();
-});
+final dbLoader = FutureProvider((ref) async => ref.read(dbProvider).open());
 
 class AssetIcon extends ConsumerWidget {
   final FutureProvider<bool> loader;

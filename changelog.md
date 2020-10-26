@@ -1,3 +1,4 @@
+* PanelPage: Ability to Edit Translation
 * Splash: icon for loading database
 * PanelPage: cards: format text like money
 * PanelPage: add sum panel

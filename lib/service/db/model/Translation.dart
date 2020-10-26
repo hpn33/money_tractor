@@ -5,7 +5,7 @@ class Translation {
 
   int amoung = 0;
   int type = 0;
-  int active = 0;
+  int active = 1;
 
   DateTime createAt;
   DateTime updateAt;
@@ -16,7 +16,7 @@ class Translation {
     // this.objectiveId = 0,
     this.amoung = 0,
     this.type = 0,
-    this.active = 0,
+    this.active = 1,
     this.createAt,
     this.updateAt,
   }) {

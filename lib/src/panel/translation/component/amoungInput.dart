@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:hooks_riverpod/all.dart';
 
-import 'submitButton.dart';
-
 class AmoungInput extends StatelessWidget {
+  final StateProvider<String> amoungProvider;
+  AmoungInput(this.amoungProvider);
+
   @override
   Widget build(BuildContext context) {
+    final initialValue = double.parse(context.read(amoungProvider).state);
     final lowPrice = MoneyMaskedTextController(
+      initialValue: initialValue,
       precision: 0,
       decimalSeparator: '',
     );

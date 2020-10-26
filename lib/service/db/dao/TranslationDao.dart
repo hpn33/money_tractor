@@ -35,4 +35,13 @@ class TranslationDao {
 
     return Translation.fromMap(maps.first);
   }
+
+  Future<int> update(Translation translation) async {
+    return await _db.update(
+      tableName,
+      translation.toMap(),
+      where: "id = ?",
+      whereArgs: [translation.id],
+    );
+  }
 }

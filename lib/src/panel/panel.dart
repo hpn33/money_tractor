@@ -4,16 +4,20 @@ import 'package:intl/intl.dart' as intl;
 import 'package:money_tractor/service/db/db_helper.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
 
-import 'translationMenu/addTDialog.dart';
+import 'translation/TranslationDialog.dart';
 
-final listProvider = StateProvider<List<Translation>>((ref) => []);
+final listProvider = FutureProvider<List<Translation>>((ref) {
+  final db = ref.read(dbProvider);
 
-class Panel extends ConsumerWidget {
+  return db.translation.all();
+});
+
+class Panel extends StatelessWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context),
-      body: body(watch),
+      body: body(context),
     );
   }
 
@@ -45,7 +49,7 @@ class Panel extends ConsumerWidget {
           onPressed: () {
             showDialog(
               context: context,
-              builder: (context) => AddTranslation(),
+              builder: (context) => TranslationDialog(),
             );
           },
         ),
@@ -53,26 +57,17 @@ class Panel extends ConsumerWidget {
     );
   }
 
-  Widget body(watch) {
-    return StreamBuilder(
-      stream: watch(dbProvider).open().asStream(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
-          return Center(child: CircularProgressIndicator());
+  Widget body(BuildContext context) {
+    context.refresh(listProvider);
 
-        context
-            .read(dbProvider)
-            .translation
-            .all()
-            .then((value) => context.read(listProvider).state = value);
-
-        return Consumer(
-          builder: (
-            BuildContext context,
-            T Function<T>(ProviderBase<Object, T>) watch,
-            Widget child,
-          ) {
-            final list = watch(listProvider).state;
+    return Consumer(
+      builder: (
+        BuildContext context,
+        T Function<T>(ProviderBase<Object, T>) watch,
+        Widget child,
+      ) {
+        return watch(listProvider).when(
+          data: (list) {
             final sum = sumAmoungs(list);
             final sumText = sumFormater(sum);
             final sumColor = sum >= 0 ? Colors.green : Colors.red;
@@ -112,6 +107,8 @@ class Panel extends ConsumerWidget {
               ],
             );
           },
+          error: (Object error, StackTrace stackTrace) => Text('$error'),
+          loading: () => Center(child: CircularProgressIndicator()),
         );
       },
     );
@@ -152,38 +149,54 @@ class TCard extends ConsumerWidget {
     final sign = isIncome ? '+' : '-';
     final amoung = intl.NumberFormat("###,###", "en_US").format(item.amoung);
 
-    return Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      textDirection: isIncome ? TextDirection.rtl : TextDirection.ltr,
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: cColor[50],
-            border: Border(bottom: BorderSide(color: cColor)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey[300],
-                spreadRadius: 1,
-                blurRadius: 5,
+    return GestureDetector(
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        textDirection: isIncome ? TextDirection.rtl : TextDirection.ltr,
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: cColor[50],
+              border: Border(bottom: BorderSide(color: cColor)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey[300],
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "$sign $amoung",
+                style: TextStyle(fontSize: 16),
               ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "$sign $amoung",
-              style: TextStyle(fontSize: 16),
             ),
           ),
-        ),
-        // Text(
-        //   '01/10/2020',
-        //   style: TextStyle(
-        //     color: Colors.grey[300],
-        //   ),
-        // ),
-      ],
+          // Text(
+          //   '01/10/2020',
+          //   style: TextStyle(
+          //     color: Colors.grey[300],
+          //   ),
+          // ),
+        ],
+      ),
+      onLongPress: () {
+        context.read(typeProvider).state = item.type == 1;
+        context.read(amoungProvider).state = item.amoung.toString();
+        context.read(idProvider).state = item.id;
+
+        showDialog(
+          context: context,
+          builder: (c) => TranslationDialog(item),
+        ).then((value) {
+          context.read(typeProvider).state = true;
+          context.read(amoungProvider).state = '0';
+          context.read(idProvider).state = -1;
+        });
+      },
     );
   }
 }
