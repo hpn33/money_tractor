@@ -50,7 +50,11 @@ class Panel extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) => TranslationDialog(),
-            );
+            ).then((value) {
+              context.read(typeProvider).state = true;
+              context.read(amoungProvider).state = '0';
+              context.read(idProvider).state = -1;
+            });
           },
         ),
       ],

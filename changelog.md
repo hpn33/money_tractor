@@ -1,3 +1,4 @@
+* PanelPage: fix: on translation insert menu was not reset after closing
 * PanelPage: Ability to Edit Translation
 * Splash: icon for loading database
 * PanelPage: cards: format text like money
