@@ -178,7 +178,10 @@ class TCard extends ConsumerWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 "$sign $amoung",
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: isActive ? null : Colors.grey,
+                ),
               ),
             ),
           ),

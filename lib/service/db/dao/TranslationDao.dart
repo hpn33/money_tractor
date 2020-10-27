@@ -16,8 +16,6 @@ class TranslationDao {
   }
 
   Future<int> insert(Translation translation) async {
-    print(translation);
-    print(translation.toMap());
     return await _db.insert(
       tableName,
       translation.toMap(),
