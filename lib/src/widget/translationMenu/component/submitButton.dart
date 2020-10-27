@@ -44,8 +44,8 @@ class SubmitButton extends ConsumerWidget {
     final translation = Translation(
       id: isInsert ? null : id,
       amoung: amoungText == '' ? 0 : int.parse(amoungText),
-      type: context.read(TranslationMenu.typeProvider).state ? 1 : 0,
-      active: context.read(TranslationMenu.activeProvider).state ? 1 : 0,
+      type: context.read(TranslationMenu.typeProvider).state,
+      active: context.read(TranslationMenu.activeProvider).state,
       createAt: isInsert
           ? DateTime.now()
           : context.read(TranslationMenu.createAtProvider).state,
@@ -58,6 +58,7 @@ class SubmitButton extends ConsumerWidget {
 
     if (result != 0) context.refresh(Panel.listProvider);
 
+    TranslationMenu.resetData(context);
     Navigator.pop(context);
   }
 

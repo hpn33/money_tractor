@@ -50,7 +50,7 @@ class Panel extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) => TranslationMenu(),
-            ).then((value) => TranslationMenu.resetData(context));
+            );
           },
         ),
       ],
@@ -118,9 +118,9 @@ class Panel extends StatelessWidget {
     var sum = 0;
 
     for (var item in list) {
-      final sign = item.type == 1 ? 1 : -1;
+      final sign = item.type ? 1 : -1;
 
-      if (item.active == 1) sum += sign * item.amoung;
+      if (item.active) sum += sign * item.amoung;
     }
     return sum;
   }
@@ -135,17 +135,14 @@ class Panel extends StatelessWidget {
   }
 }
 
-class TCard extends ConsumerWidget {
+class TCard extends StatelessWidget {
   final Translation item;
   TCard(this.item);
 
-  // final getObjectiveByIdProvider = FutureProvider.family<Objective, int>(
-  //     (ref, id) => ref.read(dbProvider).objective.getById(id));
-
   @override
-  Widget build(BuildContext context, watch) {
-    final isActive = item.active == 1;
-    final isIncome = item.type == 1;
+  Widget build(BuildContext context) {
+    final isActive = item.active;
+    final isIncome = item.type;
     final cColor = isActive
         ? isIncome
             ? Colors.green
@@ -185,12 +182,6 @@ class TCard extends ConsumerWidget {
               ),
             ),
           ),
-          // Text(
-          //   '01/10/2020',
-          //   style: TextStyle(
-          //     color: Colors.grey[300],
-          //   ),
-          // ),
         ],
       ),
       onLongPress: () {
@@ -199,7 +190,7 @@ class TCard extends ConsumerWidget {
         showDialog(
           context: context,
           builder: (c) => TranslationMenu(),
-        ).then((value) => TranslationMenu.resetData(context));
+        );
       },
       onDoubleTap: () {
         showDialog(

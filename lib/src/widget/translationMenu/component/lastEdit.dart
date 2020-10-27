@@ -11,11 +11,10 @@ class LastEdit extends StatelessWidget {
     // if not updateMode -> nothing show
     if (context.read(TranslationMenu.idProvider).state == -1) return SizedBox();
 
-    final createDate = context.read(TranslationMenu.createAtProvider).state;
-    final createFormated = DateFormat('yyyy-MM-dd   kk:mm').format(createDate);
-
-    final updateDate = context.read(TranslationMenu.updateAtProvider).state;
-    final updateFormated = DateFormat('yyyy-MM-dd   kk:mm').format(updateDate);
+    final createFormated =
+        dateFormat(context.read(TranslationMenu.createAtProvider).state);
+    final updateFormated =
+        dateFormat(context.read(TranslationMenu.updateAtProvider).state);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
@@ -49,4 +48,7 @@ class LastEdit extends StatelessWidget {
       ),
     );
   }
+
+  String dateFormat(DateTime date) =>
+      date == null ? 'null' : DateFormat('yyyy-MM-dd   kk:mm').format(date);
 }

@@ -9,8 +9,8 @@ class Translation {
   // int objectiveId = 0;
 
   int amoung = 0;
-  int type = 0;
-  int active = 1;
+  bool type = false;
+  bool active = true;
 
   DateTime createAt;
   DateTime updateAt;
@@ -20,8 +20,8 @@ class Translation {
     // this.accountId = 0,
     // this.objectiveId = 0,
     this.amoung = 0,
-    this.type = 0,
-    this.active = 1,
+    this.type = false,
+    this.active = true,
     this.createAt,
     this.updateAt,
   });
@@ -34,8 +34,8 @@ class Translation {
     // objectiveId = map['objective_id'];
 
     amoung = map['amoung'];
-    type = map['type'];
-    active = map['active'];
+    type = map['type'] == 1;
+    active = map['active'] == 1;
 
     createAt = map['create_at'] == null
         ? null
@@ -51,8 +51,8 @@ class Translation {
       // 'account_id': accountId,
       // 'objective_id': objectiveId,
       'amoung': amoung,
-      'type': type,
-      'active': active,
+      'type': type ? 1 : 0,
+      'active': active ? 1 : 0,
       'create_at': createAt.millisecondsSinceEpoch,
       'update_at': updateAt.millisecondsSinceEpoch,
     };

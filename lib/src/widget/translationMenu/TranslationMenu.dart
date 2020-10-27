@@ -67,10 +67,10 @@ class TranslationMenu extends StatelessWidget {
   }
 
   static void setItem(BuildContext context, Translation item) {
-    context.read(typeProvider).state = item.type == 1;
+    context.read(typeProvider).state = item.type;
     context.read(amoungProvider).state = item.amoung.toString();
     context.read(idProvider).state = item.id;
-    context.read(activeProvider).state = item.active == 1;
+    context.read(activeProvider).state = item.active;
     context.read(createAtProvider).state = item.createAt;
     context.read(updateAtProvider).state = item.updateAt;
   }

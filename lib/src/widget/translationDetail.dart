@@ -12,8 +12,8 @@ class TranslationDetailDialog extends StatelessWidget {
   final bool isActive;
 
   TranslationDetailDialog(this.item)
-      : isIncome = item.type == 1,
-        isActive = item.active == 1;
+      : isIncome = item.type,
+        isActive = item.active;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +23,7 @@ class TranslationDetailDialog extends StatelessWidget {
             : Colors.red
         : Colors.grey;
 
+    print(item);
     return Dialog(
       backgroundColor: color[50],
       child: Column(
@@ -54,11 +55,13 @@ class TranslationDetailDialog extends StatelessWidget {
   }
 
   Padding dateInfo() {
-    final createFormated =
-        DateFormat('yyyy-MM-dd   kk:mm').format(item.createAt);
+    final createFormated = item.createAt == null
+        ? 'null'
+        : DateFormat('yyyy-MM-dd   kk:mm').format(item.createAt);
 
-    final updateFormated =
-        DateFormat('yyyy-MM-dd   kk:mm').format(item.updateAt);
+    final updateFormated = item.updateAt == null
+        ? 'null'
+        : DateFormat('yyyy-MM-dd   kk:mm').format(item.updateAt);
 
     return Padding(
       padding: const EdgeInsets.only(
