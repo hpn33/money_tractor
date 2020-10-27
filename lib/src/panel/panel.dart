@@ -3,8 +3,7 @@ import 'package:hooks_riverpod/all.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:money_tractor/service/db/db_helper.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
-
-import 'translation/TranslationDialog.dart';
+import 'package:money_tractor/src/widget/translationMenu/TranslationMenu.dart';
 
 class Panel extends StatelessWidget {
   static final listProvider = FutureProvider<List<Translation>>((ref) {
@@ -49,8 +48,8 @@ class Panel extends StatelessWidget {
           onPressed: () {
             showDialog(
               context: context,
-              builder: (context) => TranslationDialog(),
-            ).then((value) => TranslationDialog.resetData(context));
+              builder: (context) => TranslationMenu(),
+            ).then((value) => TranslationMenu.resetData(context));
           },
         ),
       ],
@@ -194,18 +193,12 @@ class TCard extends ConsumerWidget {
         ],
       ),
       onLongPress: () {
-        context.read(TranslationDialog.typeProvider).state = item.type == 1;
-        context.read(TranslationDialog.amoungProvider).state =
-            item.amoung.toString();
-        context.read(TranslationDialog.idProvider).state = item.id;
-        context.read(TranslationDialog.activeProvider).state = item.active == 1;
-        context.read(TranslationDialog.createAtProvider).state = item.createAt;
-        context.read(TranslationDialog.updateAtProvider).state = item.updateAt;
+        TranslationMenu.setItem(context, item);
 
         showDialog(
           context: context,
-          builder: (c) => TranslationDialog(),
-        ).then((value) => TranslationDialog.resetData(context));
+          builder: (c) => TranslationMenu(),
+        ).then((value) => TranslationMenu.resetData(context));
       },
     );
   }

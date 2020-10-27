@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:money_tractor/service/db/db_helper.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
-import '../panel.dart';
+import 'package:money_tractor/src/panel/panel.dart';
+import 'component/activeButton.dart';
 import 'component/amoungInput.dart';
+import 'component/lastEdit.dart';
 import 'component/submitButton.dart';
 import 'component/switchTypePayment.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TranslationDialog extends StatelessWidget {
+class TranslationMenu extends StatelessWidget {
   static final idProvider = StateProvider((ref) => -1);
   static final typeProvider = StateProvider((ref) => true);
   static final amoungProvider = StateProvider((ref) => '0');
@@ -47,113 +48,17 @@ class TranslationDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 20),
-                activeButton(),
+                ActiveButton(),
                 Divider(),
-                lastEdit(context),
+                LastEdit(),
               ],
             ),
           ),
           SizedBox(height: 50),
-          SubmitButton(submit),
+          SubmitButton(),
         ],
       ),
     );
-  }
-
-  Widget lastEdit(BuildContext context) {
-    // if not updateMode -> nothing show
-    if (context.read(idProvider).state == -1) return SizedBox();
-
-    final createDate = context.read(createAtProvider).state;
-    final createFormated = DateFormat('yyyy-MM-dd   kk:mm').format(createDate);
-
-    final updateDate = context.read(updateAtProvider).state;
-    final updateFormated = DateFormat('yyyy-MM-dd   kk:mm').format(updateDate);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Create: '),
-              Text(
-                createFormated,
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Edit: '),
-              Text(
-                updateFormated,
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget activeButton() {
-    return Consumer(
-      builder: (
-        BuildContext context,
-        T Function<T>(ProviderBase<Object, T>) watch,
-        Widget child,
-      ) {
-        final active = watch(activeProvider).state;
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(active ? 'active' : 'deactive'),
-              Switch(
-                value: active,
-                onChanged: (bool value) {
-                  context.read(activeProvider).state = value;
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void submit(BuildContext context) async {
-    final db = context.read(dbProvider);
-    final amoungText = context.read(amoungProvider).state;
-    final id = context.read(idProvider).state;
-
-    final isInsert = id == -1;
-
-    final translation = Translation(
-      id: isInsert ? null : id,
-      amoung: amoungText == '' ? 0 : int.parse(amoungText),
-      type: context.read(typeProvider).state ? 1 : 0,
-      active: context.read(activeProvider).state ? 1 : 0,
-      createAt:
-          isInsert ? DateTime.now() : context.read(createAtProvider).state,
-      updateAt: DateTime.now(),
-    );
-
-    final result = isInsert
-        ? await db.translation.insert(translation)
-        : await db.translation.update(translation);
-
-    if (result != 0) context.refresh(Panel.listProvider);
-
-    Navigator.pop(context);
   }
 
   static void resetData(BuildContext context) {
@@ -161,6 +66,15 @@ class TranslationDialog extends StatelessWidget {
     context.read(amoungProvider).state = '0';
     context.read(idProvider).state = -1;
     context.read(activeProvider).state = true;
+  }
+
+  static void setItem(BuildContext context, Translation item) {
+    context.read(typeProvider).state = item.type == 1;
+    context.read(amoungProvider).state = item.amoung.toString();
+    context.read(idProvider).state = item.id;
+    context.read(activeProvider).state = item.active == 1;
+    context.read(createAtProvider).state = item.createAt;
+    context.read(updateAtProvider).state = item.updateAt;
   }
 }
 
