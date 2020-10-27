@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
+import 'package:money_tractor/src/panel/panel.dart';
+import 'package:money_tractor/src/widget/translationMenu/TranslationMenu.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TranslationDetailDialog extends StatelessWidget {
   final Translation item;
@@ -30,7 +33,7 @@ class TranslationDetailDialog extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                typeInfo(color),
+                typeInfo(context, color),
                 Divider(),
                 amoungInfo(color),
                 Divider(),
@@ -124,25 +127,55 @@ class TranslationDetailDialog extends StatelessWidget {
     );
   }
 
-  Row typeInfo(MaterialColor color) {
+  Row typeInfo(BuildContext context, MaterialColor color) {
     final typeText = isIncome ? 'Add' : 'Sub';
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          typeText,
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
+        Row(
+          children: [
+            Text(
+              typeText,
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+            Text(
+              isActive ? 'Active' : 'DeActive',
+              style: TextStyle(
+                color: Colors.black54,
+              ),
+            ),
+          ],
         ),
-        Text(
-          isActive ? 'Active' : 'DeActive',
-          style: TextStyle(
-            // fontSize: 18,
-            color: Colors.black54,
-          ),
+        Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                TranslationMenu.setItem(context, item);
+
+                Navigator.pop(context);
+
+                showDialog(
+                  context: context,
+                  builder: (c) => TranslationMenu(),
+                ).then((value) => context.refresh(Panel.listProvider));
+              },
+            ),
+            SizedBox(width: 5),
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () async {
+                await item.delete(context);
+                context.refresh(Panel.listProvider);
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
       ],
     );

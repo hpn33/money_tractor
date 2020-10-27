@@ -42,4 +42,12 @@ class TranslationDao {
       whereArgs: [translation.id],
     );
   }
+
+  Future<int> delete(int id) async {
+    return await _db.delete(
+      tableName,
+      where: "id = ?",
+      whereArgs: [id],
+    );
+  }
 }

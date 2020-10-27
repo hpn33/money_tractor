@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_tractor/service/db/db_helper.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Translation {
   int id;
@@ -67,5 +70,9 @@ class Translation {
       active: $active, 
       create_at: $createAt, 
       update_at: $updateAt}''';
+  }
+
+  Future<int> delete(BuildContext context) {
+    return context.read(dbProvider).translation.delete(id);
   }
 }

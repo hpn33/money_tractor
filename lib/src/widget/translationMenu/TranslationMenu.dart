@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_tractor/service/db/db_helper.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
-import 'package:money_tractor/src/panel/panel.dart';
 import 'component/activeButton.dart';
 import 'component/amoungInput.dart';
 import 'component/lastEdit.dart';
