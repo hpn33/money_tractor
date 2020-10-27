@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/all.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:money_tractor/service/db/db_helper.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
+import 'package:money_tractor/src/widget/translationDetail.dart';
 import 'package:money_tractor/src/widget/translationMenu/TranslationMenu.dart';
 
 class Panel extends StatelessWidget {
@@ -152,7 +153,7 @@ class TCard extends ConsumerWidget {
         : Colors.grey;
 
     final sign = isIncome ? '+' : '-';
-    final amoung = intl.NumberFormat("###,###", "en_US").format(item.amoung);
+    final amoung = item.formatedAmoung;
 
     return GestureDetector(
       child: Row(

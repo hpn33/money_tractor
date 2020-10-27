@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Translation {
   int id;
   // int accountId = 0;
@@ -20,6 +22,8 @@ class Translation {
     this.createAt,
     this.updateAt,
   });
+
+  String get formatedAmoung => NumberFormat("###,###", "en_US").format(amoung);
 
   Translation.fromMap(Map<String, dynamic> map) {
     id = map['id'];

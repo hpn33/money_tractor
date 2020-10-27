@@ -16,6 +16,7 @@ class LastEdit extends StatelessWidget {
 
     final updateDate = context.read(TranslationMenu.updateAtProvider).state;
     final updateFormated = DateFormat('yyyy-MM-dd   kk:mm').format(updateDate);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
       child: Column(
