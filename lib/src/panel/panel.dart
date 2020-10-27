@@ -5,15 +5,14 @@ import 'package:money_tractor/service/db/db_helper.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
 
 import 'translation/TranslationDialog.dart';
-import 'util.dart';
-
-final listProvider = FutureProvider<List<Translation>>((ref) {
-  final db = ref.read(dbProvider);
-
-  return db.translation.all();
-});
 
 class Panel extends StatelessWidget {
+  static final listProvider = FutureProvider<List<Translation>>((ref) {
+    final db = ref.read(dbProvider);
+
+    return db.translation.all();
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +50,7 @@ class Panel extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) => TranslationDialog(),
-            ).then((value) => resetData(context));
+            ).then((value) => TranslationDialog.resetData(context));
           },
         ),
       ],
@@ -192,15 +191,16 @@ class TCard extends ConsumerWidget {
         ],
       ),
       onLongPress: () {
-        context.read(typeProvider).state = item.type == 1;
-        context.read(amoungProvider).state = item.amoung.toString();
-        context.read(idProvider).state = item.id;
-        context.read(activeProvider).state = item.active == 1;
+        context.read(TranslationDialog.typeProvider).state = item.type == 1;
+        context.read(TranslationDialog.amoungProvider).state =
+            item.amoung.toString();
+        context.read(TranslationDialog.idProvider).state = item.id;
+        context.read(TranslationDialog.activeProvider).state = item.active == 1;
 
         showDialog(
           context: context,
           builder: (c) => TranslationDialog(),
-        ).then((value) => resetData(context));
+        ).then((value) => TranslationDialog.resetData(context));
       },
     );
   }

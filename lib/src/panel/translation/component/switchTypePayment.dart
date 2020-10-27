@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/all.dart';
 
-class SwitchTypePayment extends ConsumerWidget {
-  final StateProvider<bool> typeProvider;
-  SwitchTypePayment(this.typeProvider);
+import '../TranslationDialog.dart';
 
+class SwitchTypePayment extends ConsumerWidget {
   @override
   Widget build(BuildContext context, watch) {
-    final selected = watch(typeProvider).state;
+    final selected = watch(TranslationDialog.typeProvider).state;
 
     return Container(
       height: 52,
@@ -18,7 +17,7 @@ class SwitchTypePayment extends ConsumerWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                context.read(typeProvider).state = false;
+                context.read(TranslationDialog.typeProvider).state = false;
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -39,7 +38,7 @@ class SwitchTypePayment extends ConsumerWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                context.read(typeProvider).state = true;
+                context.read(TranslationDialog.typeProvider).state = true;
               },
               child: Container(
                 decoration: BoxDecoration(

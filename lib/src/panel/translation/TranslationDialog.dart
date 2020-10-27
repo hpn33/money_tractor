@@ -7,12 +7,12 @@ import 'component/submitButton.dart';
 import 'component/switchTypePayment.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final idProvider = StateProvider((ref) => -1);
-final typeProvider = StateProvider((ref) => true);
-final amoungProvider = StateProvider((ref) => '0');
-final activeProvider = StateProvider((ref) => true);
-
 class TranslationDialog extends StatelessWidget {
+  static final idProvider = StateProvider((ref) => -1);
+  static final typeProvider = StateProvider((ref) => true);
+  static final amoungProvider = StateProvider((ref) => '0');
+  static final activeProvider = StateProvider((ref) => true);
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -28,20 +28,16 @@ class TranslationDialog extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SwitchTypePayment(typeProvider),
+                SwitchTypePayment(),
                 SizedBox(height: 20),
-                AmoungInput(amoungProvider),
+                AmoungInput(),
                 SizedBox(height: 20),
                 activeButton(),
               ],
             ),
           ),
           SizedBox(height: 50),
-          SubmitButton(
-            amoungProvider,
-            typeProvider,
-            context.read(idProvider).state == -1 ? insert : update,
-          ),
+          SubmitButton(submit),
         ],
       ),
     );
@@ -75,39 +71,34 @@ class TranslationDialog extends StatelessWidget {
     );
   }
 
-  void insert(BuildContext context) async {
+  void submit(BuildContext context) async {
     final db = context.read(dbProvider);
     final amoungText = context.read(amoungProvider).state;
+    final id = context.read(idProvider).state;
 
-    final result = await db.translation.insert(
-      Translation(
-        amoung: amoungText == '' ? 0 : int.parse(amoungText),
-        type: context.read(typeProvider).state ? 1 : 0,
-        active: context.read(activeProvider).state ? 1 : 0,
-      ),
+    final isInsert = id == -1;
+
+    final translation = Translation(
+      id: isInsert ? null : id,
+      amoung: amoungText == '' ? 0 : int.parse(amoungText),
+      type: context.read(typeProvider).state ? 1 : 0,
+      active: context.read(activeProvider).state ? 1 : 0,
     );
 
-    if (result != 0) context.refresh(listProvider);
+    final result = isInsert
+        ? await db.translation.insert(translation)
+        : await db.translation.update(translation);
+
+    if (result != 0) context.refresh(Panel.listProvider);
 
     Navigator.pop(context);
   }
 
-  void update(BuildContext context) async {
-    final db = context.read(dbProvider);
-    final amoungText = context.read(amoungProvider).state;
-
-    final result = await db.translation.update(
-      Translation(
-        id: context.read(idProvider).state,
-        amoung: amoungText == '' ? 0 : int.parse(amoungText),
-        type: context.read(typeProvider).state ? 1 : 0,
-        active: context.read(activeProvider).state ? 1 : 0,
-      ),
-    );
-
-    if (result != 0) context.refresh(listProvider);
-
-    Navigator.pop(context);
+  static void resetData(BuildContext context) {
+    context.read(typeProvider).state = true;
+    context.read(amoungProvider).state = '0';
+    context.read(idProvider).state = -1;
+    context.read(activeProvider).state = true;
   }
 }
 

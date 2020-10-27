@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:hooks_riverpod/all.dart';
 
-class AmoungInput extends StatelessWidget {
-  final StateProvider<String> amoungProvider;
-  AmoungInput(this.amoungProvider);
+import '../TranslationDialog.dart';
 
+class AmoungInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final initialValue = double.parse(context.read(amoungProvider).state);
+    final initialValue =
+        double.parse(context.read(TranslationDialog.amoungProvider).state);
     final lowPrice = MoneyMaskedTextController(
       initialValue: initialValue,
       precision: 0,
@@ -18,7 +18,7 @@ class AmoungInput extends StatelessWidget {
     return TextField(
       controller: lowPrice,
       onChanged: (text) {
-        context.read(amoungProvider).state =
+        context.read(TranslationDialog.amoungProvider).state =
             lowPrice.numberValue.toInt().toString();
       },
       keyboardType: TextInputType.number,
