@@ -199,6 +199,8 @@ class TCard extends ConsumerWidget {
             item.amoung.toString();
         context.read(TranslationDialog.idProvider).state = item.id;
         context.read(TranslationDialog.activeProvider).state = item.active == 1;
+        context.read(TranslationDialog.createAtProvider).state = item.createAt;
+        context.read(TranslationDialog.updateAtProvider).state = item.updateAt;
 
         showDialog(
           context: context,

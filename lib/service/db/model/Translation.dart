@@ -19,10 +19,7 @@ class Translation {
     this.active = 1,
     this.createAt,
     this.updateAt,
-  }) {
-    // if (createAt == null) createAt = DateTime.now();
-    // if (updateAt == null) updateAt = DateTime.now();
-  }
+  });
 
   Translation.fromMap(Map<String, dynamic> map) {
     id = map['id'];
@@ -33,8 +30,12 @@ class Translation {
     type = map['type'];
     active = map['active'];
 
-    createAt = map['create_at'];
-    updateAt = map['update_at'];
+    createAt = map['create_at'] == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(map['create_at'] as int);
+    updateAt = map['update_at'] == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(map['update_at'] as int);
   }
 
   Map<String, dynamic> toMap() {
@@ -45,8 +46,8 @@ class Translation {
       'amoung': amoung,
       'type': type,
       'active': active,
-      'create_at': createAt,
-      'update_at': updateAt,
+      'create_at': createAt.millisecondsSinceEpoch,
+      'update_at': updateAt.millisecondsSinceEpoch,
     };
   }
 

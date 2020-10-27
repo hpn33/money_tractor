@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:money_tractor/service/db/db_helper.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
 import '../panel.dart';
@@ -12,6 +13,8 @@ class TranslationDialog extends StatelessWidget {
   static final typeProvider = StateProvider((ref) => true);
   static final amoungProvider = StateProvider((ref) => '0');
   static final activeProvider = StateProvider((ref) => true);
+  static final createAtProvider = StateProvider((ref) => DateTime.now());
+  static final updateAtProvider = StateProvider((ref) => DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +34,69 @@ class TranslationDialog extends StatelessWidget {
                 SwitchTypePayment(),
                 SizedBox(height: 20),
                 AmoungInput(),
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 SizedBox(height: 20),
                 activeButton(),
+                Divider(),
+                lastEdit(context),
               ],
             ),
           ),
           SizedBox(height: 50),
           SubmitButton(submit),
+        ],
+      ),
+    );
+  }
+
+  Widget lastEdit(BuildContext context) {
+    // if not updateMode -> nothing show
+    if (context.read(idProvider).state == -1) return SizedBox();
+
+    final createDate = context.read(createAtProvider).state;
+    final createFormated = DateFormat('yyyy-MM-dd   kk:mm').format(createDate);
+
+    final updateDate = context.read(updateAtProvider).state;
+    final updateFormated = DateFormat('yyyy-MM-dd   kk:mm').format(updateDate);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Create: '),
+              Text(
+                createFormated,
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Edit: '),
+              Text(
+                updateFormated,
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -83,6 +142,9 @@ class TranslationDialog extends StatelessWidget {
       amoung: amoungText == '' ? 0 : int.parse(amoungText),
       type: context.read(typeProvider).state ? 1 : 0,
       active: context.read(activeProvider).state ? 1 : 0,
+      createAt:
+          isInsert ? DateTime.now() : context.read(createAtProvider).state,
+      updateAt: DateTime.now(),
     );
 
     final result = isInsert
