@@ -201,6 +201,12 @@ class TCard extends ConsumerWidget {
           builder: (c) => TranslationMenu(),
         ).then((value) => TranslationMenu.resetData(context));
       },
+      onDoubleTap: () {
+        showDialog(
+          context: context,
+          builder: (c) => TranslationDetailDialog(item),
+        );
+      },
     );
   }
 }
