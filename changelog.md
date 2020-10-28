@@ -1,3 +1,11 @@
+* Refactor: TranslationModel
+* TranslationDetailDialog: edit & delete option
+* create TranslationDetailDialog for show detail
+* Refactor: TranslationModel present formatedAmoung
+* move translationMenu files
+* use time on Translation
+* better look for TranslaitonCard when not active
+* Refactor: TranslationDialog
 * PanelPage: add activation to translation
 * PanelPage: clean unused code
 * PanelPage: fix: on translation insert menu was not reset after closing
