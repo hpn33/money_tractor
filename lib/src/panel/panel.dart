@@ -3,8 +3,9 @@ import 'package:hooks_riverpod/all.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:money_tractor/service/db/db_helper.dart';
 import 'package:money_tractor/service/db/model/Translation.dart';
-import 'package:money_tractor/src/widget/translationDetail.dart';
 import 'package:money_tractor/src/widget/translationMenu/TranslationMenu.dart';
+
+import 'component/OptionMenu.dart';
 
 class Panel extends StatelessWidget {
   static final listProvider = FutureProvider<List<Translation>>((ref) {
@@ -185,17 +186,9 @@ class TCard extends StatelessWidget {
         ],
       ),
       onLongPress: () {
-        TranslationMenu.setItem(context, item);
-
         showDialog(
           context: context,
-          builder: (c) => TranslationMenu(),
-        );
-      },
-      onDoubleTap: () {
-        showDialog(
-          context: context,
-          builder: (c) => TranslationDetailDialog(item),
+          builder: (c) => OptionMenu(item),
         );
       },
     );
