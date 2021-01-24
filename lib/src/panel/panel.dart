@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:money_tractor/service/db/db_helper.dart';
@@ -136,7 +137,7 @@ class Panel extends StatelessWidget {
   }
 }
 
-class TCard extends StatelessWidget {
+class TCard extends HookWidget {
   final Translation item;
   TCard(this.item);
 
@@ -153,44 +154,56 @@ class TCard extends StatelessWidget {
     final sign = isIncome ? '+' : '-';
     final amoung = item.formatedAmoung;
 
-    return GestureDetector(
-      child: Row(
-        textDirection: isIncome ? TextDirection.rtl : TextDirection.ltr,
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: isActive ? cColor[50] : Colors.grey[200],
-              border: Border(bottom: BorderSide(color: cColor)),
-              boxShadow: isActive
-                  ? [
-                      BoxShadow(
-                        color: Colors.grey[300],
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                      ),
-                    ]
-                  : null,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "$sign $amoung",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: isActive ? null : Colors.grey,
+    final controller = useAnimationController(duration: Duration(seconds: 1));
+    final tween = useAnimation(
+      Tween(
+        begin: isIncome ? 100.0 : -100.0,
+        end: 0.0,
+      ).animate(controller),
+    );
+    controller.forward();
+
+    return Transform.translate(
+      offset: Offset(tween, 0),
+      child: GestureDetector(
+        child: Row(
+          textDirection: isIncome ? TextDirection.rtl : TextDirection.ltr,
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: isActive ? cColor[50] : Colors.grey[200],
+                border: Border(bottom: BorderSide(color: cColor)),
+                boxShadow: isActive
+                    ? [
+                        BoxShadow(
+                          color: Colors.grey[300],
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                        ),
+                      ]
+                    : null,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "$sign $amoung",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: isActive ? null : Colors.grey,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+        onLongPress: () {
+          showDialog(
+            context: context,
+            builder: (c) => OptionMenu(item),
+          );
+        },
       ),
-      onLongPress: () {
-        showDialog(
-          context: context,
-          builder: (c) => OptionMenu(item),
-        );
-      },
     );
   }
 }
