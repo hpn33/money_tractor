@@ -1,4 +1,4 @@
-import 'package:money_tractor/service/db/model/Translation.dart';
+import 'package:money_tractor/service/db/model/translation.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TranslationDao {

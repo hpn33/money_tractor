@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:money_tractor/page/panel/panel.dart';
+import 'package:money_tractor/page/widget/animation/fader.dart';
 import 'package:money_tractor/service/db/db_helper.dart';
-import 'package:money_tractor/src/panel/panel.dart';
-import 'package:money_tractor/src/widget/animation/Fader.dart';
 
 class Splash extends HookWidget {
+  const Splash({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final loading = useState(false);
     final animationController = useAnimationController(
-      duration: Duration(milliseconds: 1350),
+      duration: const Duration(milliseconds: 1350),
     );
 
     final animation = useAnimation(
@@ -123,8 +125,9 @@ class Splash extends HookWidget {
       AnimationController animationController, double animation) {
     return AnimatedBuilder(
       animation: animationController,
-      builder: (BuildContext context, Widget child) {
+      builder: (context, child) {
         print(animation);
+
         return Column(
           children: [
             Spacer(flex: 3),
@@ -132,12 +135,12 @@ class Splash extends HookWidget {
               child: Transform.translate(
                 offset: Offset(0, -100 * (1 - animation)),
                 child: Fader(
-                  child: Text(
+                  Text(
                     'Money Tractor',
                     style: TextStyle(
                       fontSize: 38,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ),
@@ -179,7 +182,9 @@ class AssetIcon extends HookWidget {
 
         if (snapshot.hasError) return iconTemp(Colors.red);
 
-        return iconTemp(snapshot.data ? Colors.green : Colors.red);
+        return iconTemp(snapshot.data != null && snapshot.data!
+            ? Colors.green
+            : Colors.red);
       },
     );
   }

@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class Fader extends HookWidget {
   final Widget child;
 
-  Fader({Key key, this.child}) : super(key: key);
+  const Fader(this.child, {Key? key}) : super(key: key);
 
   AnimationController _animationController;
 

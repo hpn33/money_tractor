@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:money_tractor/service/db/model/Translation.dart';
-import 'component/activeButton.dart';
-import 'component/amoungInput.dart';
-import 'component/lastEdit.dart';
-import 'component/submitButton.dart';
-import 'component/switchTypePayment.dart';
+import 'package:money_tractor/service/db/model/translation.dart';
+import 'component/active_button.dart';
+import 'component/amoung_input.dart';
+import 'component/last_edit.dart';
+import 'component/submit_button.dart';
+import 'component/switch_type_payment.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TranslationMenu extends StatelessWidget {
@@ -14,6 +14,8 @@ class TranslationMenu extends StatelessWidget {
   static final activeProvider = StateProvider((ref) => true);
   static final createAtProvider = StateProvider((ref) => DateTime.now());
   static final updateAtProvider = StateProvider((ref) => DateTime.now());
+
+  const TranslationMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

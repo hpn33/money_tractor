@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../TranslationMenu.dart';
+import '../translation_menu.dart';
 
 class SwitchTypePayment extends ConsumerWidget {
+  const SwitchTypePayment({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, watch) {
     final selected = watch(TranslationMenu.typeProvider).state;
 
-    return Container(
+    return SizedBox(
       height: 52,
       width: double.infinity,
       child: Row(
@@ -21,13 +23,13 @@ class SwitchTypePayment extends ConsumerWidget {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                   ),
                   color: selected == false ? null : Colors.grey[300],
                 ),
                 alignment: Alignment.center,
-                child: Text('Sub'),
+                child: const Text('Sub'),
               ),
             ),
           ),
@@ -42,15 +44,12 @@ class SwitchTypePayment extends ConsumerWidget {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                  ),
+                  borderRadius:
+                      const BorderRadius.only(topRight: Radius.circular(10)),
                   color: selected == true ? null : Colors.grey[300],
                 ),
                 alignment: Alignment.center,
-                child: Text(
-                  'Add',
-                ),
+                child: const Text('Add'),
               ),
             ),
           ),

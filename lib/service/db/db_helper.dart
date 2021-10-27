@@ -1,9 +1,9 @@
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'dao/TranslationDao.dart';
+import 'dao/translation_dao.dart';
 
 final dbProvider = Provider((ref) => DatabaseHelper());
 
@@ -11,7 +11,7 @@ class DatabaseHelper {
   final _databaseName = "moneyTractor.db";
   final _databaseVersion = 1;
 
-  Database _database;
+  late Database _database;
 
   Future<bool> open() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
@@ -40,7 +40,7 @@ class DatabaseHelper {
         //       """);
 
         db.execute("""CREATE TABLE translations(
-              id INTEGER PRIMARY KEY,""" +
+              id INTEGER PRIMARY KEY,"""
             // account_id INTEGER NOT NULL,
             // objective_id INTEGER,
             """
@@ -59,7 +59,7 @@ class DatabaseHelper {
 
   // AccountDao _account = AccountDao();
   // ObjectiveDao _objective = ObjectiveDao();
-  TranslationDao _translation = TranslationDao();
+  final TranslationDao _translation = TranslationDao();
 
   // AccountDao get account {
   //   _account.checkDB(_database);

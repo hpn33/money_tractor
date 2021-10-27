@@ -1,4 +1,4 @@
-import 'package:money_tractor/service/db/model/Account.dart';
+import 'package:money_tractor/service/db/model/account.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AccountDao {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../TranslationMenu.dart';
+import '../translation_menu.dart';
 
 class ActiveButton extends ConsumerWidget {
+  const ActiveButton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, watch) {
     final active = watch(TranslationMenu.activeProvider).state;

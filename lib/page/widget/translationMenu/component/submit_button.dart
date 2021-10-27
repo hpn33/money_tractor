@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:money_tractor/page/panel/panel.dart';
 import 'package:money_tractor/service/db/db_helper.dart';
-import 'package:money_tractor/service/db/model/Translation.dart';
-import 'package:money_tractor/src/panel/panel.dart';
+import 'package:money_tractor/service/db/model/translation.dart';
 
-import '../TranslationMenu.dart';
+import '../translation_menu.dart';
 
 class SubmitButton extends ConsumerWidget {
+  const SubmitButton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, watch) {
     final amoungText = watch(TranslationMenu.amoungProvider).state;

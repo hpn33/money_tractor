@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:money_tractor/page/widget/translationMenu/translation_menu.dart';
 import 'package:money_tractor/service/db/db_helper.dart';
-import 'package:money_tractor/service/db/model/Translation.dart';
-import 'package:money_tractor/src/widget/translationMenu/TranslationMenu.dart';
+import 'package:money_tractor/service/db/model/translation.dart';
 
-import 'component/OptionMenu.dart';
+import 'component/option_menu.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Panel extends StatelessWidget {
   static final listProvider = FutureProvider<List<Translation>>((ref) {
@@ -14,6 +16,8 @@ class Panel extends StatelessWidget {
 
     return db.translation.all();
   });
+
+  const Panel({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +42,9 @@ class Panel extends StatelessWidget {
         //     );
         //   },
         // ),
-        FlatButton(
+        TextButton(
           child: Row(
-            children: [
+            children: const [
               Icon(Icons.add, color: Colors.white),
               Text(
                 'Add Translation',
@@ -62,13 +66,11 @@ class Panel extends StatelessWidget {
   Widget body(BuildContext context) {
     context.refresh(listProvider);
 
-    return Consumer(
-      builder: (
-        BuildContext context,
-        T Function<T>(ProviderBase<Object, T>) watch,
-        Widget child,
-      ) {
-        return watch(listProvider).when(
+    return HookBuilder(
+      builder: (context) {
+        final list = useProvider(listProvider);
+
+        return list.when(
           data: (list) {
             final sum = sumAmoungs(list);
             final sumText = sumFormater(sum);
@@ -79,9 +81,9 @@ class Panel extends StatelessWidget {
                 Expanded(
                   child: ListView(
                     children: [
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       for (var item in list) TCard(item),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -96,7 +98,7 @@ class Panel extends StatelessWidget {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey[400],
+                        color: Colors.grey[400]!,
                         spreadRadius: 1,
                         blurRadius: 5,
                       ),
@@ -109,11 +111,21 @@ class Panel extends StatelessWidget {
               ],
             );
           },
-          error: (Object error, StackTrace stackTrace) => Text('$error'),
-          loading: () => Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => Text('$error'),
+          loading: () => const Center(child: CircularProgressIndicator()),
         );
       },
     );
+
+    // return Consumer(
+    //   builder: (
+    //     BuildContext context,
+    //     T Function<T>(ProviderBase<Object, T>) watch,
+    //     Widget child,
+    //   ) {
+
+    //   },
+    // );
   }
 
   int sumAmoungs(List<Translation> list) {
@@ -177,7 +189,7 @@ class TCard extends HookWidget {
                 boxShadow: isActive
                     ? [
                         BoxShadow(
-                          color: Colors.grey[300],
+                          color: Colors.grey[300]!,
                           spreadRadius: 1,
                           blurRadius: 5,
                         ),

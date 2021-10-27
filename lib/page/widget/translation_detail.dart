@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:money_tractor/service/db/model/Translation.dart';
+import 'package:money_tractor/service/db/model/translation.dart';
 import 'package:money_tractor/src/panel/panel.dart';
 import 'package:money_tractor/src/widget/translationMenu/TranslationMenu.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

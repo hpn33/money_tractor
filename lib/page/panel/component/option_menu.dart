@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:money_tractor/service/db/model/Translation.dart';
-import 'package:money_tractor/src/widget/translationDetail.dart';
-import 'package:money_tractor/src/widget/translationMenu/TranslationMenu.dart';
+import 'package:money_tractor/page/widget/translation_detail.dart';
+import 'package:money_tractor/page/widget/translationMenu/translation_menu.dart';
+import 'package:money_tractor/service/db/model/translation.dart';
 
 import '../panel.dart';
 
@@ -9,7 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class OptionMenu extends StatelessWidget {
   final Translation translation;
-  OptionMenu(this.translation);
+
+  const OptionMenu(this.translation, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class OptionMenu extends StatelessWidget {
                 );
               },
             ),
-            Divider(),
+            const Divider(),
             item(
               icon: Icons.edit,
               text: 'Edit',
@@ -43,11 +44,11 @@ class OptionMenu extends StatelessWidget {
 
                 showDialog(
                   context: context,
-                  builder: (c) => TranslationMenu(),
+                  builder: (c) => const TranslationMenu(),
                 ).then((value) => context.refresh(Panel.listProvider));
               },
             ),
-            Divider(),
+            const Divider(),
             item(
               icon: Icons.delete,
               text: 'Delete',
@@ -63,14 +64,19 @@ class OptionMenu extends StatelessWidget {
     );
   }
 
-  Widget item({IconData icon, String text, void Function() press}) => InkWell(
+  Widget item({
+    required IconData icon,
+    required String text,
+    void Function()? press,
+  }) =>
+      InkWell(
         onTap: press,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
               Icon(icon),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(text),
             ],
           ),

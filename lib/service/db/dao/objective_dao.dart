@@ -1,4 +1,4 @@
-import 'package:money_tractor/service/db/model/Objective.dart';
+import 'package:money_tractor/service/db/model/objective.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ObjectiveDao {

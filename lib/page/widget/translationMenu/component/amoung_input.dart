@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../TranslationMenu.dart';
+import '../translation_menu.dart';
 
 class AmoungInput extends StatelessWidget {
+  const AmoungInput({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final initialValue =

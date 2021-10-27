@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/all.dart';
-import 'package:money_tractor/src/app.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'page/app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

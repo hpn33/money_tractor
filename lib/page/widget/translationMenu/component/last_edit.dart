@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../TranslationMenu.dart';
+import '../translation_menu.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LastEdit extends StatelessWidget {
+  const LastEdit({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // if not updateMode -> nothing show
-    if (context.read(TranslationMenu.idProvider).state == -1) return SizedBox();
+    if (context.read(TranslationMenu.idProvider).state == -1)
+      return const SizedBox();
 
     final createFormated =
         dateFormat(context.read(TranslationMenu.createAtProvider).state);
@@ -23,24 +26,20 @@ class LastEdit extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Create: '),
+              const Text('Create: '),
               Text(
                 createFormated,
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(color: Colors.grey),
               ),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Edit: '),
+              const Text('Edit: '),
               Text(
                 updateFormated,
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(color: Colors.grey),
               ),
             ],
           ),
@@ -49,6 +48,6 @@ class LastEdit extends StatelessWidget {
     );
   }
 
-  String dateFormat(DateTime date) =>
+  String dateFormat(DateTime? date) =>
       date == null ? 'null' : DateFormat('yyyy-MM-dd   kk:mm').format(date);
 }
