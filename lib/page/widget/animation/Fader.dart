@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class Fader extends HookWidget {
+  // AnimationController _animationController;
   final Widget child;
 
   const Fader(this.child, {Key? key}) : super(key: key);
 
-  AnimationController _animationController;
+  // void show() async => _animationController.forward();
 
-  void show() async => _animationController.forward();
-
-  void hide() async => _animationController.reverse();
+  // void hide() async => _animationController.reverse();
 
   @override
   Widget build(BuildContext context) {
-    _animationController = useAnimationController(
-      duration: Duration(milliseconds: 350),
+    final _animationController = useAnimationController(
+      duration: const Duration(milliseconds: 350),
     );
 
     useEffect(() {
@@ -40,8 +39,12 @@ class FaderManual extends HookWidget {
   final AnimationController controller;
   final double animation;
 
-  FaderManual({Key key, this.controller, this.animation, this.child})
-      : super(key: key);
+  const FaderManual({
+    Key? key,
+    required this.controller,
+    required this.animation,
+    required this.child,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

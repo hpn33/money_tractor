@@ -18,7 +18,7 @@ class Splash extends HookWidget {
     final animation = useAnimation(
       CurvedAnimation(
         parent: animationController,
-        curve: Interval(
+        curve: const Interval(
           0.1,
           0.300,
           curve: Curves.easeInOut,
@@ -29,7 +29,7 @@ class Splash extends HookWidget {
     final fade1 = useAnimation(
       CurvedAnimation(
         parent: animationController,
-        curve: Interval(
+        curve: const Interval(
           0.5,
           0.8,
           curve: Curves.easeInOut,
@@ -39,7 +39,7 @@ class Splash extends HookWidget {
     final fade2 = useAnimation(
       CurvedAnimation(
         parent: animationController,
-        curve: Interval(
+        curve: const Interval(
           0.6,
           0.9,
           curve: Curves.easeInOut,
@@ -49,7 +49,7 @@ class Splash extends HookWidget {
     final fade3 = useAnimation(
       CurvedAnimation(
         parent: animationController,
-        curve: Interval(
+        curve: const Interval(
           0.7,
           1.0,
           curve: Curves.easeInOut,
@@ -61,7 +61,7 @@ class Splash extends HookWidget {
         loading.value = true;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (c) => Panel()),
+          MaterialPageRoute(builder: (c) => const Panel()),
         );
       }
     }
@@ -95,22 +95,24 @@ class Splash extends HookWidget {
                           FaderManual(
                             controller: animationController,
                             animation: fade1,
-                            child: AssetIcon(),
+                            child: const AssetIcon(),
                           ),
                           FaderManual(
                             controller: animationController,
                             animation: fade2,
-                            child: AssetIcon(),
+                            child: const AssetIcon(),
                           ),
                           FaderManual(
                             controller: animationController,
                             animation: fade3,
-                            child: AssetIcon(),
+                            child: const AssetIcon(),
                           ),
                         ],
                       ),
                     ),
-                    loading.value ? LinearProgressIndicator() : SizedBox(),
+                    loading.value
+                        ? const LinearProgressIndicator()
+                        : const SizedBox(),
                   ],
                 ),
               ),
@@ -130,7 +132,7 @@ class Splash extends HookWidget {
 
         return Column(
           children: [
-            Spacer(flex: 3),
+            const Spacer(flex: 3),
             Center(
               child: Transform.translate(
                 offset: Offset(0, -100 * (1 - animation)),
@@ -146,7 +148,7 @@ class Splash extends HookWidget {
                 ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
           ],
         );
       },
@@ -157,10 +159,10 @@ class Splash extends HookWidget {
 // final dbLoader = FutureProvider((ref) async => ref.read(dbProvider).open());
 
 class AssetIcon extends HookWidget {
-  final FutureProvider<bool> loader;
-  final void Function(bool) onComplete;
+  final FutureProvider<bool>? loader;
+  final void Function(bool)? onComplete;
 
-  AssetIcon({this.loader, this.onComplete});
+  const AssetIcon({this.loader, this.onComplete, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +170,7 @@ class AssetIcon extends HookWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         icon(),
-        Text('database'),
+        const Text('database'),
       ],
     );
   }
@@ -177,8 +179,9 @@ class AssetIcon extends HookWidget {
     return FutureBuilder(
       future: useProvider(dbProvider).open(),
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return iconTemp(Colors.orange);
+        }
 
         if (snapshot.hasError) return iconTemp(Colors.red);
 

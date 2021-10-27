@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 Timer useTimerPeriodic({
-  Duration duration,
-  void Function(Timer) callback,
+  required Duration duration,
+  required void Function(Timer) callback,
 }) {
   return use(
     _TimerPeriodicHook(
@@ -17,8 +17,8 @@ Timer useTimerPeriodic({
 
 class _TimerPeriodicHook extends Hook<Timer> {
   const _TimerPeriodicHook({
-    this.duration,
-    this.callback,
+    required this.duration,
+    required this.callback,
   });
 
   final Duration duration;
@@ -29,7 +29,7 @@ class _TimerPeriodicHook extends Hook<Timer> {
 }
 
 class _TimerPeriodicHookState extends HookState<Timer, _TimerPeriodicHook> {
-  Timer timer;
+  Timer? timer;
 
   @override
   void initHook() {
@@ -38,13 +38,11 @@ class _TimerPeriodicHookState extends HookState<Timer, _TimerPeriodicHook> {
   }
 
   @override
-  Timer build(BuildContext context) {
-    return timer;
-  }
+  Timer build(BuildContext context) => timer!;
 
   @override
   void dispose() {
-    timer.cancel();
+    timer!.cancel();
     timer = null;
   }
 

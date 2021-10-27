@@ -11,8 +11,9 @@ class LastEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // if not updateMode -> nothing show
-    if (context.read(TranslationMenu.idProvider).state == -1)
+    if (context.read(TranslationMenu.idProvider).state == -1) {
       return const SizedBox();
+    }
 
     final createFormated =
         dateFormat(context.read(TranslationMenu.createAtProvider).state);

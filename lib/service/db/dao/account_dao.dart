@@ -2,7 +2,7 @@ import 'package:money_tractor/service/db/model/account.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AccountDao {
-  Database _db;
+  Database? _db;
   final String tableName = 'accounts';
 
   void checkDB(Database database) {

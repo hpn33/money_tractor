@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_tractor/page/panel/panel.dart';
 import 'package:money_tractor/service/db/model/translation.dart';
-import 'package:money_tractor/src/panel/panel.dart';
-import 'package:money_tractor/src/widget/translationMenu/TranslationMenu.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'translationMenu/translation_menu.dart';
 
 class TranslationDetailDialog extends StatelessWidget {
   final Translation item;
@@ -11,9 +12,10 @@ class TranslationDetailDialog extends StatelessWidget {
   final bool isIncome;
   final bool isActive;
 
-  TranslationDetailDialog(this.item)
+  TranslationDetailDialog(this.item, {Key? key})
       : isIncome = item.type,
-        isActive = item.active;
+        isActive = item.active,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +37,9 @@ class TranslationDetailDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 typeInfo(context, color),
-                Divider(),
+                const Divider(),
                 amoungInfo(color),
-                Divider(),
+                const Divider(),
                 dateInfo(),
               ],
             ),
@@ -75,10 +77,10 @@ class TranslationDetailDialog extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('create'),
+              const Text('create'),
               Text(
                 createFormated,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.grey,
                 ),
               ),
@@ -87,10 +89,10 @@ class TranslationDetailDialog extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('edit'),
+              const Text('edit'),
               Text(
                 updateFormated,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.grey,
                 ),
               ),
@@ -120,7 +122,7 @@ class TranslationDetailDialog extends StatelessWidget {
           ),
           Text(
             '$sign ${item.formatedAmoung}',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               color: Colors.black54,
             ),
@@ -148,7 +150,7 @@ class TranslationDetailDialog extends StatelessWidget {
             ),
             Text(
               isActive ? 'Active' : 'DeActive',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black54,
               ),
             ),
@@ -157,7 +159,7 @@ class TranslationDetailDialog extends StatelessWidget {
         Row(
           children: [
             IconButton(
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               onPressed: () {
                 TranslationMenu.setItem(context, item);
 
@@ -165,13 +167,13 @@ class TranslationDetailDialog extends StatelessWidget {
 
                 showDialog(
                   context: context,
-                  builder: (c) => TranslationMenu(),
+                  builder: (c) => const TranslationMenu(),
                 ).then((value) => context.refresh(Panel.listProvider));
               },
             ),
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
             IconButton(
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               onPressed: () async {
                 await item.delete(context);
                 context.refresh(Panel.listProvider);
